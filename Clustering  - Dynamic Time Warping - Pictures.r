@@ -1,5 +1,4 @@
-library("dtw")
-setwd("C:/Users/Dest/Desktop/Project 2 PhD/2nd Chpapter ANALYSES/Human localities again/Hypervolume analyses")
+libraryrequiresetwd("C:/Users/Dest/Desktop/Project 2 PhD/2nd Chpapter ANALYSES/Human localities again/Hypervolume analyses")
 nam <- as.vector(NULL)
 for(ss in seq_along(dir(pattern = "_volumes.txt")[-c(7,9,11,14)]))
 {
@@ -55,17 +54,19 @@ for (i in seq_along(ls(pattern = "_timeseries")))
     {
       tim1 <- get(ls(pattern = "_timeseries")[i])
       tim2 <- get(ls(pattern = "_timeseries")[j])
-      cl[i,j] <- dtw(t(tim1), t(tim2), distance.only = FALSE)$normalizedDistance  ## normalized distance matrix of all timeseries (even different lengths)
+      ## normalized distance matrix of all timeseries (as well different lengths) ###
+      cl[i,j] <- dtw(t(tim1), t(tim2), distance.only = FALSE)$normalizedDistance 
     }
   }
 }
 
-cl2 <- as.dist(cl) ### is the same as the cl file but just takes the lower triangular matrix
-clusters <- hclust(cl2, method="complete")
-mypal = c("#556270", "#4ECDC4", "#1B676B", "#FF6B6B", "#C44D58")
+cl2 <- as.dist(cl) ### it takes the lower triangular matrix
+clusters <- hclust(cl2, method="complete") ## Hierarchical clustering
+mypal = c("#556270", "#4ECDC4", "#1B676B", "#FF6B6B", "#C44D58") ## choose colors
 op = par(bg = "#E8DDCB")
 require("ape")
 clus_cut <- cutree(clusters, k=c(2:5))
+## Plot as phylogenetic tree - type fan ##
 # par(mfrow=c(2,2), mar=c(2.5,1.8,2.6,1.6))
 # for (cuts in 1:4)
 # {
@@ -82,6 +83,8 @@ for (cuts in 1:4)
 }
 
 library(MASS)
+
+## Non- Metric Multidimennsional Scaling ##
 #mydata <- as.dist(cl) ### NMDS needs a distance matrix to represent the low dimension distances between species
 # fit <- cmdscale(cl2, k=2) ### non metric MDS. k is the number of dimensions
 # x <- fit$points[,1]
@@ -89,13 +92,13 @@ library(MASS)
 # plot(x, y, xlab="Coordinate 1", ylab="Coordinate 2", main="Metric	MDS",	type="n")
 # text(x, y, labels = row.names(cl), cex=.7)
 
+## Use pictures instead of points ##
 library(jpeg)
 library(png)
 fit <- isoMDS(cl2, k=2)
 x <- fit$points[,1]
 y <- fit$points[,2]
-# pdf(file=paste("Final_clustering_NMDS.pdf"), width=12, height = 9)
-# par(oma=c(3,3,3,3))
+
 plot(x, y, xlab="", ylab="", main="Nonmetric MDS", cex.main=0.8, type="n", xlim=c(min(fit$points[,1])-1, max(fit$points[,1]+1)),
      ylim=c(min(fit$points[,2])-1, max(fit$points[,2]+1)), bty="l", axes=F, xaxs="i")
 axis(side=1, col="black", at=seq(-7,11,2), lwd=1, col.ticks="black", cex.axis=0.7)
@@ -109,9 +112,8 @@ for (i in 1:nrow(fit$points))
 text(x, y-0.2, labels = row.names(cl), cex=.7, col="steelblue3")
 mtext(side = 1, line = 2.4, cex=0.7, "NMDS1")
 mtext(side = 2, line = 2.4, cex=0.7, "NMDS2")
-# dev.off()
 
-### Partial clustering with volume and niche overlap ###
+### Partial clustering with niche volume and niche overlap ###
 
 library("dtw")
 setwd("C:/Users/Dest/Desktop/Project 2 PhD/2nd Chpapter ANALYSES/Human localities again/Hypervolume analyses")
@@ -201,13 +203,9 @@ species_list <- nam
 
 for (tt in seq_along(species_list))
 {
-  # Vol <- read.delim(paste(species_list[tt], "_volumes.txt", sep=""), h=T, sep="\t", stringsAsFactors = FALSE)
-  # print(nrow(Vol))
-  # vol2 <- t(Vol)
+ 
   Hum_ov <-read.delim(paste(species_list[tt],"_humans_overlap.txt", sep=""), h=T, sep="\t", stringsAsFactors = FALSE)
   print(nrow(Hum_ov))
-  #over2 <- t(Hum_ov)
-  #comb1 <- cbind(Vol, Hum_ov)
   comb_tim <- as.vector(NULL)
   for (i in 1:nrow(Hum_ov))
   {
@@ -250,10 +248,6 @@ library(png)
 fit <- isoMDS(cl2, k=2)
 x <- fit$points[,1]
 y <- fit$points[,2]
-#pdf(file=paste("Final_clustering_NMDS.pdf"), width=12, height = 9)
-#par(oma=c(3,3,3,3))
-# plot(x, y, xlab="", ylab="", main="Nonmetric MDS", cex.main=0.8, type="n", xlim=c(min(fit$points[,1]-0.1), max(fit$points[,1]+ 0.1)),
-#      ylim=c(min(fit$points[,2]-0.1), max(fit$points[,2]+0.1)), bty="l", axes=F, xaxs="i")
 plot(x, y, xlab="", ylab="", main="Nonmetric MDS", cex.main=0.8, type="n", xlim=c(-0.2,0.2),
      ylim=c(-0.2,0.2), bty="l", axes=F, xaxs="i")
 axis(side=1, col="black", at=seq(-0.2,0.2,0.1), lwd=1, col.ticks="black", cex.axis=0.7, labels=TRUE)
@@ -267,5 +261,4 @@ for (i in 1:nrow(fit$points))
 text(x-0.02, y+0.01, labels = row.names(cl), cex=.6, col="orange")
 mtext(side = 1, line = 2.4, cex=0.7, "NMDS1")
 mtext(side = 2, line = 2.4, cex=0.7, "NMDS2")
-#dev.off()
 
