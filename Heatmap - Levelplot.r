@@ -14,8 +14,6 @@ for(ss in seq_along(dir(pattern = "_humans_overlaps")[seq(1,21,2)]))
   n <- strsplit(dir(pattern = "_humans_overlaps")[seq(1,21,2)][ss], split="_humans_overlaps")[[1]][1]
   nam <- c(nam, n)
 }
-# colX <- seqPalette(100, "Blues")
-# colX2 <- colX[c(7:(length(nam) + 6))]
 rownames(all_over) <- nam
 colnames(all_over) <- bins
 all_over2 <- data.matrix(all_over[-c(5),c(4:27)])
@@ -81,7 +79,6 @@ my_palette <- colorRampPalette(c("grey90", "orange", "dark red"))(n = 299)
 col.breaks <- c(seq(0.0001, 0.1, length=30), seq(0.1001, 0.2, length=30), seq(0.2001, 0.3, length=30), seq(0.3001, 0.4, length=30), seq(0.4001, 0.5, length=30),
 seq(0.5001, 0.6, length=30), seq(0.6001, 0.7, length=30), seq(0.7001, 0.8, length=30), seq(0.8001, 0.9, length=30), seq(0.9001, 1, length=30))
 
-#
 distance = dist(all_over2, method = "manhattan")
 cluster = hclust(distance, method = "average")
 
@@ -96,5 +93,3 @@ par(oma=c(4,4,4,4), mar=c(3,3,3,3))
 all_over_heat <- heatmap.2(all_over2, cellnote=ifelse(is.na(all_over2),"",round(all_over2,2)), main="Human-Mammal Overlap", notecol="black", density.info="none",
 trace="none", col=my_palette, breaks= col.breaks, Rowv=as.dendrogram(cluster),
 key=TRUE, keysize=0.85, key.par = list(cex=0.75), Colv=F, dendrogram="row", na.rm=TRUE, cexRow=0.7)
-
-
