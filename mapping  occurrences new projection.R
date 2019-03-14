@@ -1,15 +1,15 @@
-library(maptools)
-library(mapproj)
-library(rgdal)
-library(maps)
-library(mapdata)
-library(fBasics)
+require(maptools)
+require(mapproj)
+require(rgdal)
+require(maps)
+require(mapdata)
+require(fBasics)
 
 
 setwd("C:/Users/Dest/Desktop/Project 2 PhD/2nd Chpapter ANALYSES/Human localities again/Geographic Overlap per time inerval/Geographic oVerlap 3 Variables/Geographic Overlap 3 variables resampling")
 
-species_DB <- read.delim("Species_environmental_variables_new_way_different_bins.txt", h=T, sep="\t")
-Human_DB <- read.delim("Humans_environmental_variables_new_way_different_bins.txt", h=T, sep="\t")
+species_DB <- read.delim("Species_environmental_variables.txt", h=T, sep="\t")
+Human_DB <- read.delim("Humans_environmental_variables.txt", h=T, sep="\t")
 #species_list <- as.vector(unique(species_DB$Species)) ## get species names - in our case can be time bins as well
 
 spec_Intervals <- sort(as.vector(unique(species_DB$Interval)), decreasing=FALSE)
